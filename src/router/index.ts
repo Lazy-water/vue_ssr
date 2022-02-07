@@ -1,4 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { 
+  createRouter as _createRouter,
+  createWebHistory,
+  createMemoryHistory } from 'vue-router'
 
 const routes = [{
   path: '/',
@@ -8,7 +11,7 @@ const routes = [{
   component: () => import('./../views/about.vue')
 }]
 
-export default createRouter({
-  history: createWebHistory(),
+export const createRouter = _createRouter({
+  history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
   routes
 })

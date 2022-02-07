@@ -1,10 +1,10 @@
-import { createApp } from 'vue'
-import router from './router'
+import { createSSRApp } from 'vue'
+import { createRouter as router } from './router'
 import App from './App.vue'
 import './style/toot'
 
-const APP = createApp(App)
-
-APP.use(router)
-
-APP.mount('#app')
+export const createApp = () => {
+  const app = createSSRApp(App)
+  app.use(router)
+  return { app, router }
+}
