@@ -1,33 +1,38 @@
 <template>
   <router-link to="/about">{{num}}</router-link>
-  <p>{{aaa}}</p>
-  <div @click="setA">center</div>
+  <p class="bbb">{{aaa.company_name}}</p>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import axios from 'axios'
 export default{
+  asyncData({ store }: any) {
+    axios.get(
+      'http://school.kouhigh.top/admin_company_category'
+    ).then(({ data }) => {
+      store.dispatch('setNum', data.data)
+    })
+    return {
+      title: 'index'
+    }
+  },
   setup() {
     const store = useStore()
 
+    let state = reactive({
+      aaa: store.state.num.aaa
+    })
+
+    console.log(store.state.num.aaa)
+    
     let num = ref(store.state.num.num)
-    let aaa = ref(111)
-    const setA = () => {
-      store.dispatch('setNum', 333)
-      aaa.value = store.state.num.aaa
-    }
-    
-    
+    // let aaa = ref(store.state.num.aaa)
+
     return {
-      setA,
       num,
-      aaa
-    }
-  },
-  head() {
-    return {
-      title: 'index'
+      ...toRefs(state)
     }
   }
 }

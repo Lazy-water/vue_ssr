@@ -9,6 +9,7 @@
     "serve": "npm run build && cross-env NODE_ENV=production node server.ts"
   },
   "dependencies": {
+    "axios": "^0.25.0",
     "express": "^4.17.2",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",

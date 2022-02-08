@@ -14,28 +14,30 @@ export async function render(url: any, manifest: any) {
   await matchedRoute.map(async route => {
     await matchedComponents.push(...Object.values(route.components))
   })
-  const headInfo = await matchedComponents.map(async (component: any) => {
-    const head = await component.head || null;
-    if(head) {
-      if((typeof head === 'function') === false) {
-        return await Promise.resolve(head)
+  const asyncDataFuncs = await matchedComponents.map(async (component: any) => {
+    const asyncData = await component.asyncData || null;
+    if(asyncData) {
+      const config = {
+        store,
+        route: to
       }
-      return await head()
+      if((typeof asyncData === 'function') === false) {
+        return await Promise.resolve(asyncData(config))
+      }
+      return await asyncData(config)
     }
   })
-  let title: string = ''
-  await Promise.all(headInfo).then(data => {
+  let title: string = '', html, preloadLinks, state;
+  await Promise.all(asyncDataFuncs).then(async (data) => {
     let info = data[data.length - 1]
     title = info?.title ? info.title : 'vue_ssr'
+    const ctx = {
+      modules: null
+    }
+    html = await renderToString(app, ctx)
+    preloadLinks = await renderPreloadLinks(ctx.modules, manifest)
+    state = await JSON.stringify(store.state);
   })
-
-
-  const ctx = {
-    modules: null
-  }
-  const html = await renderToString(app, ctx)
-  const preloadLinks = await renderPreloadLinks(ctx.modules, manifest)
-  const state = await JSON.stringify(store.state);
 
   return await [html, preloadLinks, state, title]
 }

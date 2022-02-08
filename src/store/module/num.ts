@@ -1,7 +1,7 @@
 export default {
   state: {
     num: 1111,
-    aaa: 222
+    aaa: {}
   },
   mutations: {
     SET_AAA(state: any, aaa: any) {

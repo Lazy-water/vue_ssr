@@ -9,17 +9,21 @@ router.beforeResolve((to, from, next) => {
   matched.map((route) => {
     matchedComponents.push(...Object.values(route.components))
   })
-  const headInfo = matchedComponents.map((component: any) => {
-    const head = component.head || null;
-    if(head) {
-      if((typeof head === 'function') === false) {
-        return Promise.resolve(head)
+  const asyncDataFuncs = matchedComponents.map((component: any) => {
+    const asyncData = component.asyncData || null;
+    if(asyncData) {
+      const config = {
+        store,
+        route: to
       }
-      return head()
+      if((typeof asyncData === 'function') === false) {
+        return Promise.resolve(asyncData(config))
+      }
+      return asyncData(config)
     }
   })
   try{
-    Promise.all(headInfo).then((data: any) => {
+    Promise.all(asyncDataFuncs).then((data: any) => {
       let info = data[data.length - 1]
       document.title = info?.title ? info.title : 'vue_ssr'
       next()
