@@ -1,14 +1,16 @@
 <template>
-  <div class="aaa">index</div>
+  <router-link to="/about">index</router-link>
 </template>
 
 <script lang="ts">
-import { useRoute } from 'vue-router'
 export default{
   setup() {
-    const route = useRoute()
-    route.meta.title = 11
-    console.log(import.meta.env.SSR)
+
+  },
+  head() {
+    return {
+      title: 'index'
+    }
   }
 }
 </script>

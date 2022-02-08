@@ -5,23 +5,10 @@ import {
 
 export const routes = [{
   path: '/',
-  component: () => import('./../views/index.vue'),
-  meta: {
-    title: '首页'
-  },
-  children: [{
-    path: '/index',
-    component: () => import('./../views/home.vue'),
-    meta: {
-      title: '首页1'
-    }
-  }]
+  component: () => import('./../views/index.vue')
 }, {
-  path: '/adout',
-  component: () => import('./../views/about.vue'),
-  meta: {
-    title: '我的'
-  }
+  path: '/about',
+  component: () => import('./../views/about.vue')
 }]
 
 export const createRouter = _createRouter({

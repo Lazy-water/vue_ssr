@@ -3,17 +3,40 @@ import { renderToString } from 'vue/server-renderer'
 import { basename } from 'path'
 
 export async function render(url: any, manifest: any) {
-  const { app, router, routes } = createApp()
+  const { app, router } = createApp()
 
-  router.push(url)
+  await router.push(url)
   await router.isReady()
+
+  const to = router.currentRoute
+  const matchedRoute = to.value.matched
+  const matchedComponents: any = []
+  await matchedRoute.map(async route => {
+    await matchedComponents.push(...Object.values(route.components))
+  })
+  const headInfo = await matchedComponents.map(async (component: any) => {
+    const head = await component.head || null;
+    if(head) {
+      if((typeof head === 'function') === false) {
+        return await Promise.resolve(head)
+      }
+      return await head()
+    }
+  })
+  let title: string = ''
+  await Promise.all(headInfo).then(data => {
+    let info = data[data.length - 1]
+    title = info?.title ? info.title : 'vue_ssr'
+  })
+
 
   const ctx = {
     modules: null
   }
   const html = await renderToString(app, ctx)
-  const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
-  return [html, preloadLinks, routes]
+  const preloadLinks = await renderPreloadLinks(ctx.modules, manifest)
+
+  return await [html, preloadLinks, title]
 }
 
 function renderPreloadLinks(modules: any, manifest: any) {
