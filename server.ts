@@ -46,9 +46,11 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
         render = (await vite.ssrLoadModule('/src/entry-server.ts')).render
       }
       
-      const [appHtml, preloadLinks, title] = await render(url, manifest);
-      const html = template.replace(`<!--preload-links-->`, preloadLinks)
+      const [appHtml, preloadLinks, state, title] = await render(url, manifest);
+      const html = template
       .replace(`<!--ssr-outlet-->`, appHtml)
+      .replace(`<!--preload-links-->`, preloadLinks)
+      .replace(`'<vuex-state>'`, state)
       .replace(`<!--ssr-title-->`, title)
       
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)

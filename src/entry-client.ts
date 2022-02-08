@@ -1,6 +1,6 @@
 import { createApp } from './main'
 
-const { app, router } = createApp()
+const { app, router, store } = createApp()
 
 
 router.beforeResolve((to, from, next) => {
@@ -30,6 +30,9 @@ router.beforeResolve((to, from, next) => {
   }
 })
 
+if (window.__INITIAL_STATE__) {
+  store.replaceState(window.__INITIAL_STATE__);
+}
 
 router.isReady().then(() => {
   app.mount('#app')
