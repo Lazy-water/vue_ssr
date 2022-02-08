@@ -2,6 +2,24 @@ const fs = require('fs')
 const path = require('path')
 const express = require('express')
 
+const expandRoute = routes => {
+  let newRoutes = []
+  routes.forEach(item => {
+    newRoutes.push(item)
+    if(item.children) {
+      newRoutes.push.apply(newRoutes, expandRoute(item.children))
+    }
+  })
+  return newRoutes
+}
+
+const setPageHead = (routes, url) => {
+  let route = expandRoute(routes).find(item => item.path === url)
+  return {
+    title: route.meta.title
+  }
+}
+
 async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV === 'production') {
   const resolve = (p) => path.resolve(__dirname, p)
 
@@ -46,10 +64,11 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
         render = (await vite.ssrLoadModule('/src/entry-server.ts')).render
       }
       
-      const [appHtml, preloadLinks] = await render(url, manifest);
-
+      const [appHtml, preloadLinks, routes] = await render(url, manifest);
+      const { title } =  setPageHead(routes, url)
       const html = template.replace(`<!--preload-links-->`, preloadLinks)
-      .replace(`<!--app-html-->`, appHtml)
+      .replace(`<!--ssr-outlet-->`, appHtml)
+      .replace(`<!--ssr-title-->`, title)
       
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {

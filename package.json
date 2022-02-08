@@ -6,7 +6,7 @@
     "build:client": "vue-tsc --noEmit && vite build --outDir dist/client --ssrManifest",
     "build:server": "vue-tsc --noEmit && vite build --outDir dist/server --ssr src/entry-server.ts",
     "build": "npm run build:client && npm run build:server",
-    "serve": "cross-env NODE_ENV=production node server.ts"
+    "serve": "npm run build && cross-env NODE_ENV=production node server.ts"
   },
   "dependencies": {
     "express": "^4.17.2",

@@ -3,12 +3,25 @@ import {
   createWebHistory,
   createMemoryHistory } from 'vue-router'
 
-const routes = [{
+export const routes = [{
   path: '/',
-  component: () => import('./../views/index.vue')
+  component: () => import('./../views/index.vue'),
+  meta: {
+    title: '首页'
+  },
+  children: [{
+    path: '/index',
+    component: () => import('./../views/home.vue'),
+    meta: {
+      title: '首页1'
+    }
+  }]
 }, {
   path: '/adout',
-  component: () => import('./../views/about.vue')
+  component: () => import('./../views/about.vue'),
+  meta: {
+    title: '我的'
+  }
 }]
 
 export const createRouter = _createRouter({
