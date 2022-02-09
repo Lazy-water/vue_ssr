@@ -23,7 +23,7 @@ export default{
     const setA = async () => {
       await axios.get(
         'http://school.kouhigh.top/admin_company_category'
-      ).then( async ({ data }) => {
+      ).then(({ data }) => {
         // store.dispatch('setNum', data.data)
         state.aaa = data.data
       })
