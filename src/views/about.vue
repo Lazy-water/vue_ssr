@@ -16,11 +16,8 @@ export default{
       back
     }
   },
-  asyncData() {
-
-    return {
-      title: 'about'
-    }
+  head: {
+    title: 'about'
   }
 }
 </script>

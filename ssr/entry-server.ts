@@ -1,34 +1,16 @@
-import { createApp } from './main'
+import { headInfoFn, router, store, app } from './entry'
 import { renderToString } from 'vue/server-renderer'
 import { basename } from 'path'
 
 export async function render(url: any, manifest: any) {
-  const { app, router, store } = createApp()
-
   await router.push(url)
   await router.isReady()
 
   const to = router.currentRoute
-  const matchedRoute = to.value.matched
-  const matchedComponents: any = []
-  await matchedRoute.map(async route => {
-    await matchedComponents.push(...Object.values(route.components))
-  })
-  const asyncDataFuncs = await matchedComponents.map(async (component: any) => {
-    const asyncData = await component.asyncData || null;
-    if(asyncData) {
-      const config = {
-        store,
-        route: to
-      }
-      if((typeof asyncData === 'function') === false) {
-        return await Promise.resolve(asyncData(config))
-      }
-      return await asyncData(config)
-    }
-  })
+  const matched = to.value.matched
+
   let title: string = ''
-  await Promise.all(asyncDataFuncs).then(data => {
+  await Promise.all(headInfoFn(matched)).then(data => {
     let info = data[data.length - 1]
     title = info?.title ? info.title : 'vue_ssr'
   })

@@ -8,16 +8,16 @@ import { ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 export default{
-  asyncData() {
-    return {
-      title: 'index'
-    }
+  head: {
+    title: 'index'
   },
   async setup() {
     const store = useStore()
 
     let state = reactive({
-      aaa: null
+      aaa: {
+        company_name: ''
+      }
     })
 
     const setA = async () => {
