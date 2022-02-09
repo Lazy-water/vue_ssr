@@ -6,7 +6,6 @@ import './style/toot'
 
 export const createApp = () => {
   const app = createSSRApp(App)
-  app.use(router)
-  app.use(store)
+  app.use(store).use(router)
   return { app, router, store }
 }

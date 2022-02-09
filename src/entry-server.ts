@@ -27,17 +27,18 @@ export async function render(url: any, manifest: any) {
       return await asyncData(config)
     }
   })
-  let title: string = '', html, preloadLinks, state;
-  await Promise.all(asyncDataFuncs).then(async (data) => {
+  let title: string = ''
+  await Promise.all(asyncDataFuncs).then(data => {
     let info = data[data.length - 1]
     title = info?.title ? info.title : 'vue_ssr'
-    const ctx = {
-      modules: null
-    }
-    html = await renderToString(app, ctx)
-    preloadLinks = await renderPreloadLinks(ctx.modules, manifest)
-    state = await JSON.stringify(store.state);
   })
+
+  const ctx = {
+    modules: null
+  }
+  const html = await renderToString(app, ctx)
+  const preloadLinks = await renderPreloadLinks(ctx.modules, manifest)
+  const state = await JSON.stringify(store.state);
 
   return await [html, preloadLinks, state, title]
 }

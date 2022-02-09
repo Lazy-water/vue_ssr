@@ -52,8 +52,8 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
       .replace(`<!--preload-links-->`, preloadLinks)
       .replace(`'<vuex-state>'`, state)
       .replace(`<!--ssr-title-->`, title)
-      
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+
+      res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
     } catch (e) {
       vite.ssrFixStacktrace(e)
       console.error(e)

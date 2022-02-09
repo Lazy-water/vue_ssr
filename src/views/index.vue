@@ -8,28 +8,31 @@ import { ref, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 export default{
-  asyncData({ store }: any) {
-    axios.get(
-      'http://school.kouhigh.top/admin_company_category'
-    ).then(({ data }) => {
-      store.dispatch('setNum', data.data)
-    })
+  asyncData() {
     return {
       title: 'index'
     }
   },
-  setup() {
+  async setup() {
     const store = useStore()
 
     let state = reactive({
-      aaa: store.state.num.aaa
+      aaa: null
     })
 
-    console.log(store.state.num.aaa)
+    const setA = async () => {
+      await axios.get(
+        'http://school.kouhigh.top/admin_company_category'
+      ).then( async ({ data }) => {
+        // store.dispatch('setNum', data.data)
+        state.aaa = data.data
+      })
+    }
+    
     
     let num = ref(store.state.num.num)
     // let aaa = ref(store.state.num.aaa)
-
+    await setA()
     return {
       num,
       ...toRefs(state)
