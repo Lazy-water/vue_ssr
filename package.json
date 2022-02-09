@@ -6,7 +6,8 @@
     "build:client": "vue-tsc --noEmit && vite build --outDir dist/client --ssrManifest",
     "build:server": "vue-tsc --noEmit && vite build --outDir dist/server --ssr ssr/entry-server.ts",
     "build": "npm run build:client && npm run build:server",
-    "serve": "cross-env NODE_ENV=production node server.ts"
+    "serve": "cross-env NODE_ENV=production node server.ts",
+    "release": "node release.ts production"
   },
   "dependencies": {
     "express": "^4.17.2",
@@ -21,6 +22,7 @@
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
     "sass": "^1.49.7",
+    "shelljs": "^0.8.5",
     "typescript": "^4.5.5",
     "vite": "^2.7.2",
     "vite-plugin-compression": "^0.5.1",

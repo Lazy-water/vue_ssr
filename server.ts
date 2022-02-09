@@ -55,7 +55,7 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
 
       res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
     } catch (e) {
-      vite.ssrFixStacktrace(e)
+      vite?.ssrFixStacktrace(e)
       console.error(e)
       res.status(500).end(e.message)
     }
