@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require("path")
 const shell = require("shelljs")
 
-const env = process.argv[2]
+const env: string = process.argv[2]
 
 const pck = JSON.parse(fs.readFileSync('./package.json'))
 const dependencies = JSON.stringify(pck.dependencies)

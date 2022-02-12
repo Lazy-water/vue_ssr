@@ -3,7 +3,7 @@ import { createApp } from '../src/main'
 export const { app, router, store } = createApp()
 
 export const headInfoFn = (matched?: any) => {
-  const matchedComponents: any = []
+  const matchedComponents: any[] = []
   matched.map(async (route: any) => {
     await matchedComponents.push(...Object.values(route.components))
   })

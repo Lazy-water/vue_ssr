@@ -2,7 +2,7 @@ import { headInfoFn, router, store, app } from './entry'
 import { renderToString } from 'vue/server-renderer'
 import { basename } from 'path'
 
-export async function render(url: any, manifest: any) {
+export async function render(url: string, manifest): Promise<string []> {
   await router.push(url)
   await router.isReady()
 
@@ -25,7 +25,7 @@ export async function render(url: any, manifest: any) {
   return await [html, preloadLinks, state, title]
 }
 
-function renderPreloadLinks(modules: any, manifest: any) {
+function renderPreloadLinks(modules: string [], manifest): string {
   let links = ''
   const seen = new Set()
   modules.forEach((id: any) => {
@@ -49,7 +49,7 @@ function renderPreloadLinks(modules: any, manifest: any) {
   return links
 }
 
-function renderPreloadLink(file: any) {
+function renderPreloadLink(file): string {
   if (file.endsWith('.js')) {
     return `<link rel="modulepreload" crossorigin href="${file}">`
   } else if (file.endsWith('.css')) {
