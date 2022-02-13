@@ -2,7 +2,7 @@ import { headInfoFn, router, store, app } from './entry'
 import { renderToString } from 'vue/server-renderer'
 import { basename } from 'path'
 
-export async function render(url: string, manifest): Promise<string []> {
+export async function render(url: string, manifest): Promise<string[]> {
   await router.push(url)
   await router.isReady()
 
@@ -25,7 +25,7 @@ export async function render(url: string, manifest): Promise<string []> {
   return await [html, preloadLinks, state, title]
 }
 
-function renderPreloadLinks(modules: string [], manifest): string {
+function renderPreloadLinks(modules: string[], manifest): string {
   let links = ''
   const seen = new Set()
   modules.forEach((id: any) => {

@@ -4,7 +4,7 @@ router.beforeResolve((to, from, next) => {
   const matched = router.resolve(to).matched
 
   try{
-    Promise.all(headInfoFn(matched)).then((data: any) => {
+    Promise.all(headInfoFn(matched)).then((data: any[]) => {
       let info = data[data.length - 1]
       document.title = info?.title ? info.title : 'vue_ssr'
       next()
